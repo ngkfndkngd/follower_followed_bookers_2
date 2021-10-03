@@ -4,7 +4,18 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :validatable
 
- has_many :books, dependent: :destroy
+  has_many :books, dependent: :destroy
+ 
+ # フォローするユーザーから中間テーブルへのアソシエーション
+  has_many :relationships, foreign_key: :follower_id, dependent: :destroy
+  # フォローするユーザーからフォローされたユーザを取得する
+  has_many :followers, through: :relationships, source: :followed
+  
+  # フォローされるユーザーから中間テーブルへのアソシエーション
+  has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: :followed_id, dependent: :destroy
+  # フォローされるユーザー
+  からフォローしているユーザを取得する
+  has_many :followeds, through: :reverse_of_relationships, source: :follower
 
  attachment :profile_image
  
