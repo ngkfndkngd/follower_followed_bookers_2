@@ -13,8 +13,6 @@ class User < ApplicationRecord
   
   # フォローされるユーザーから中間テーブルへのアソシエーション
   has_many :reverse_of_relationships, class_name: "Relationship", foreign_key: :followed_id, dependent: :destroy
-  # フォローされるユーザー
-  からフォローしているユーザを取得する
   has_many :followeds, through: :reverse_of_relationships, source: :follower
 
  attachment :profile_image
